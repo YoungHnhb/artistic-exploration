@@ -1,6 +1,6 @@
-#第一章 Activity的生命周期和启动模式
-##1.1 Activity的生命周期全面分析
-###①典型情况（用户正常操作）
+# 第一章 Activity的生命周期和启动模式
+## 1.1 Activity的生命周期全面分析
+### ①典型情况（用户正常操作）
 onCreate：做一些初始化
 onRestart：
 onStart：可见但未出现在前台
@@ -20,7 +20,7 @@ E/TT: B Start
 E/TT: B resume
 E/TT: A stop
 
-###②异常情况（被回收或者configuration改变导致activity被销毁重建）
+### ②异常情况（被回收或者configuration改变导致activity被销毁重建）
 
 比如旋转屏幕若不对Activity做处理
 10-21 23:16:58.486 29569-29569/com.liyueyang.demo E/TT: A create
@@ -47,8 +47,8 @@ E/TT: A stop
 ---
 对Activity配置configChanges重写onConfigurationChanged()实现不重建Activity
 ---
-##1.2 Activity的启动模式
-###启动模式LaunchMode
+## 1.2 Activity的启动模式
+### 启动模式LaunchMode
 1.standard 
 *非Activity的Context没有所谓任务栈，需要为待启动Activity指定FLAG_ACTIVITY_NEW_TASK,
 此时实际上是以singleTask模式启动*
@@ -59,7 +59,7 @@ E/TT: A stop
 
 *查看栈信息
 adb shell dumpsys activity*
-###标志位Flags
+### 标志位Flags
 FLAG_ACTIVITY_NEW_TASK
 FLAG_ACTIVITY_SINGLE_TOP
 FLAG_ACTIVITY_CLEAR_TOP
