@@ -7,7 +7,7 @@
 
 ## Android 的消息机制概述
 - Android规定访问UI只能在主线程中进行
-> ViewRootImpl 的checkThread对UI操作做了验证
+- ViewRootImpl 的checkThread对UI操作做了验证
 ```
 // mThread在ViewRootImpl构造方法内赋值
 mThread = Thread.currentThread(); 
@@ -19,9 +19,9 @@ void checkThread() {
     }
 }
 ```
--Handler主要为了解决在子线程无法访问UI的矛盾
-Q:为什么不允许子线程访问UI
-A:
+- Handler主要为了解决在子线程无法访问UI的矛盾
+- Q:为什么不允许子线程访问UI
+- A:
 1. UI空间线程不安全
 2. 锁机制会让UI访问的机制变复杂
 3. 锁机制会降低UI访问的效率，因为锁会阻塞某些线程的执行
@@ -52,13 +52,14 @@ new Thread("Thread#2") {
         Log.e("TTT", "[Thread#2]mBooleanThreadLocal=" + mBooleanThreadLocal.get());
     }
 }.start();
-```
-> 运行结果：
-> E/TTT: [Thread#main]mBooleanThreadLocal=true
-> E/TTT: [Thread#1]mBooleanThreadLocal=false
-> E/TTT: [Thread#2]mBooleanThreadLocal=null
 
-ThreadLocal的set、get方法
+运行结果：
+E/TTT: [Thread#main]mBooleanThreadLocal=true
+E/TTT: [Thread#1]mBooleanThreadLocal=false
+E/TTT: [Thread#2]mBooleanThreadLocal=null
+```
+
+- ThreadLocal的set、get方法
 ```
 public void set(T value) {
     Thread t = Thread.currentThread();
@@ -85,7 +86,7 @@ public T get() {
 ```
 
 ### 消息队列的工作原理
-MessageQueue
+- MessageQueue
 插入数据：enqueueMessage
 读取数据：next // 读取伴随着删除操作
 - 内部通过**单链表**的数据结构
@@ -135,27 +136,28 @@ public interface Callback {
 ```
 
 ### Handler的工作原理
-> public final boolean sendMessage(Message msg) ↓
-> public final boolean sendMessageDelayed(Message msg, long delayMillis) ↓
-> public boolean sendMessageAtTime(Message msg, long uptimeMillis) {
->     MessageQueue queue = mQueue;
->     if (queue == null) {
->         RuntimeException e = new RuntimeException(
->                 this + " sendMessageAtTime() called with no mQueue");
->         Log.w("Looper", e.getMessage(), e);
->         return false;
->     }
->     return enqueueMessage(queue, msg, uptimeMillis);
-> }
-> 
-> private boolean enqueueMessage(MessageQueue queue, Message msg, long uptimeMillis) {
->     msg.target = this;
-> 	  if (mAsynchronous) {
-> 	      msg.setAsynchronous(true);
-> 	  }
-> 	  return queue.enqueueMessage(msg, uptimeMillis);
-> }
-> 
+```
+public final boolean sendMessage(Message msg) ↓
+public final boolean sendMessageDelayed(Message msg, long delayMillis) ↓
+public boolean sendMessageAtTime(Message msg, long uptimeMillis) {
+    MessageQueue queue = mQueue;
+    if (queue == null) {
+        RuntimeException e = new RuntimeException(
+                this + " sendMessageAtTime() called with no mQueue");
+        Log.w("Looper", e.getMessage(), e);
+        return false;
+    }
+    return enqueueMessage(queue, msg, uptimeMillis);
+}
+
+private boolean enqueueMessage(MessageQueue queue, Message msg, long uptimeMillis) {
+    msg.target = this;
+	if (mAsynchronous) {
+	    msg.setAsynchronous(true);
+	}
+	return queue.enqueueMessage(msg, uptimeMillis);
+}
+```
 ```
 public Handler(Looper looper) {
 	this(looper, null, false);	
